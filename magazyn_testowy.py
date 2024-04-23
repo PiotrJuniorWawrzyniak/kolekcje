@@ -1,36 +1,12 @@
-# KLASY I METODY
-# class Magazyn:
-#     def __init__(self):
-#         self.magazyn = {}
-#         self.saldo = 0
-#         self.historia = []
-#
-#     def wczytaj_zapisany_stan(self):
-#         self.magazyn = ...
-#         self.saldo = ...
-#         self.historia = ...
-
-# OPIS ZADANIA
-# Na podstawie zadania z lekcji 5 (operacje na koncie, sprzedaż/zakup itp.)
-# należy zaimplementować poniższą część:
-#
-# Saldo konta oraz magazyn mają zostać zapisane do pliku tekstowego, a przy kolejnym
-# uruchomieniu programu ma zostać odczytany. Zapisać należy również historię
-# operacji (przegląd), która powinna być rozszerzana przy każdym kolejnym
-# uruchomieniu programu.
-
 DOSTEPNE_KOMENDY = ['saldo', 'sprzedaz', 'zakup', 'konto', 'lista',
                     'magazyn', 'przeglad', 'koniec']
 
 konto = 0
 magazyn = {}
 liczba_sztuk_w_magazynie = 0
-# nazwa_magazynowa = None
 nazwa_produktu = None
-# cena_produktu = 0
 cena_magazynowa = 0
 lista_operacji = []
-
 
 while True:
     print(f'Dostepne komendy: {DOSTEPNE_KOMENDY}')
@@ -54,14 +30,14 @@ while True:
                 print('Nieprawidlowa ilosc.')
                 continue
             elif liczba_sztuk > magazyn[nazwa_produktu]['sztuk']:
-                print('Nie ma tyle sztuk w magazynie.')
+                print('Nie ma tylu sztuk w magazynie.')
                 continue
             else:
-                magazyn[nazwa_produktu]['sztuk'] -= liczba_sztuk
                 cena_produktu = float(input('Podaj cene produktu: '))
                 if cena_produktu <= 0:
                     print('Cena nie mozna byc ujemna ani zerowa.')
                 else:
+                    magazyn[nazwa_produktu]['sztuk'] -= liczba_sztuk
                     konto += cena_produktu * liczba_sztuk
                     lista_operacji.append(
                         f'Sprzedano produkt {nazwa_produktu}, '
@@ -74,16 +50,18 @@ while True:
         if liczba_sztuk <= 0:
             print('Nieprawidlowa ilosc.')
             continue
-        if nazwa_produktu not in magazyn:
-            magazyn[nazwa_produktu] = {'sztuk': 0, 'cena': 0}
-        magazyn[nazwa_produktu]['sztuk'] += liczba_sztuk
-        liczba_sztuk_w_magazynie = magazyn[nazwa_produktu]['sztuk']
         cena_produktu = float(input('Podaj cenę produktu: '))
         if cena_produktu > konto or cena_produktu * liczba_sztuk > konto:
             print('Nie masz wystarczajacych srodkow na koncie.')
+            continue
         elif cena_produktu <= 0:
-            print('Cena nie mozna byc ujemna.')
+            print('Cena nie mozna byc ujemna ani zerowa.')
+            continue
         else:
+            if nazwa_produktu not in magazyn:
+                magazyn[nazwa_produktu] = {'sztuk': 0, 'cena': 0}
+            magazyn[nazwa_produktu]['sztuk'] += liczba_sztuk
+            liczba_sztuk_w_magazynie = magazyn[nazwa_produktu]['sztuk']
             magazyn[nazwa_produktu]['cena'] += cena_produktu
             konto -= cena_produktu * liczba_sztuk_w_magazynie
             cena_magazynowa = cena_produktu
@@ -97,24 +75,25 @@ while True:
         print(f'Stan konta wynosi: {konto}')
 
     elif wybor_uzytkownika == 'lista':
+        print('Stan magazynu wynosi:')
         for nazwa_produktu, liczba_sztuk_w_magazynie in magazyn.items():
             if magazyn[nazwa_produktu]['sztuk'] > 0:
-                print(f'Stan magazynu wynosi: produkt {nazwa_produktu}, '
-                      f'{liczba_sztuk_w_magazynie}')
-            else:
-                print('Magazyn jest pusty.')
+                print(nazwa_produktu, liczba_sztuk_w_magazynie)
+        # if magazyn[nazwa_produktu]['sztuk'] == 0:
+        #     print('Magazyn jest pusty.')
 
     elif wybor_uzytkownika == 'magazyn':
         towar = input('Podaj nazwe towaru: ')
         for nazwa_produktu, liczba_sztuk_w_magazynie in magazyn.items():
-            if nazwa_produktu == towar:
+            if towar == nazwa_produktu:
                 if magazyn[nazwa_produktu]['sztuk'] > 0:
                     print(f'Stan magazynu dla produktu {nazwa_produktu} wynosi: '
                           f'{liczba_sztuk_w_magazynie}')
-                else:
+                elif magazyn[nazwa_produktu]['sztuk'] == 0:
                     print('Produktu nie ma w magazynie.')
-            else:
-                print('Produktu nie ma w magazynie.')
+        if towar not in magazyn:
+            print('Produktu nie ma w magazynie.')
+            continue
 
     elif wybor_uzytkownika == 'przeglad':
         poczatek = int(input('Podaj zakres opeacji od: ')) - 1
