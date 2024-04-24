@@ -75,20 +75,24 @@ while True:
         print(f'Stan konta wynosi: {konto}')
 
     elif wybor_uzytkownika == 'lista':
+        magazyn_pusty = True
         print('Stan magazynu wynosi:')
-        for nazwa_produktu, liczba_sztuk_w_magazynie in magazyn.items():
+        for nazwa_produktu, ilosc in magazyn.items():
+            liczba_sztuk_w_magazynie = ilosc['sztuk']
             if magazyn[nazwa_produktu]['sztuk'] > 0:
-                print(nazwa_produktu, liczba_sztuk_w_magazynie)
-        # if magazyn[nazwa_produktu]['sztuk'] == 0:
-        #     print('Magazyn jest pusty.')
+                magazyn_pusty = False
+                print(f'Produkt {nazwa_produktu}, sztuk {liczba_sztuk_w_magazynie}')
+        if magazyn_pusty:
+            print('Magazyn jest pusty.')
 
     elif wybor_uzytkownika == 'magazyn':
         towar = input('Podaj nazwe towaru: ')
-        for nazwa_produktu, liczba_sztuk_w_magazynie in magazyn.items():
+        for nazwa_produktu, ilosc in magazyn.items():
+            liczba_sztuk_w_magazynie = ilosc['sztuk']
             if towar == nazwa_produktu:
                 if magazyn[nazwa_produktu]['sztuk'] > 0:
-                    print(f'Stan magazynu dla produktu {nazwa_produktu} wynosi: '
-                          f'{liczba_sztuk_w_magazynie}')
+                    print(f'Stan magazynu dla produktu {nazwa_produktu}: '
+                          f'sztuk {liczba_sztuk_w_magazynie}')
                 elif magazyn[nazwa_produktu]['sztuk'] == 0:
                     print('Produktu nie ma w magazynie.')
         if towar not in magazyn:
