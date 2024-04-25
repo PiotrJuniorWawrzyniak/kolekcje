@@ -1,24 +1,14 @@
+# odczyt z pliku bez towaru o wartosci zero
+# obiekt magazyn
+# import z pliku
+# angielskie nazwy
+
 DOSTEPNE_KOMENDY = ['saldo', 'sprzedaz', 'zakup', 'konto', 'lista',
                     'magazyn', 'przeglad', 'koniec']
 
 konto = 0
 magazyn = {}
-liczba_sztuk_w_magazynie = 0
-nazwa_produktu = None
-cena_magazynowa = 0
 lista_operacji = []
-
-
-# class Magazyn:
-#     def __init__(self, magazyn, saldo, przeglad):
-#         self.magazyn = {}
-#         self.saldo = 0
-#         self.przeglad = []
-#
-#     def wczytaj_zapisany_stan(self):
-#         self.magazyn = ...
-#         self.saldo = ...
-#         self.przeglad = ...
 
 
 def wykonaj_saldo():
@@ -131,7 +121,39 @@ def pokaz_przeglad():
         print(f'Lista operacji: {lista_operacji[0:dlugosc_listy]}')
 
 
+def zapisz_do_pliku(nazwa_pliku):
+    with open(nazwa_pliku, 'w') as plik:
+        plik.write(f'Stan konta: {konto}\n')
+        plik.write('Stan magazynu:\n')
+        for nazwa_produktu, ilosc in magazyn.items():
+            plik.write(f'Produkt: {nazwa_produktu}, dostepne sztuki: {ilosc["sztuk"]}\n')
+        plik.write('Historia operacji:\n')
+        for operacja in lista_operacji:
+            plik.write(f'{operacja}\n')
+
+
+def odczytaj_z_pliku(nazwa_pliku):
+    global konto, magazyn, lista_operacji
+
+    try:
+        with open(nazwa_pliku, 'r') as plik:
+            linie = plik.readlines()
+            konto = float(linie[0].split(': ')[1].strip())
+            for linia in linie[2:]:
+                if linia.startswith('Produkt'):
+                    czesci = linia.split(',')
+                    nazwa_produktu = czesci[0].split(': ')[1].strip()
+                    ilosc_sztuk = int(czesci[1].split(': ')[1].strip())
+                    magazyn[nazwa_produktu] = {'sztuk': ilosc_sztuk, 'cena': 0}
+                elif linia.startswith('Sprzedano') or linia.startswith('Kupiono'):
+                    lista_operacji.append(linia.strip())
+    except FileNotFoundError:
+        print("Plik nie istnieje. Nie wczytano stanu.")
+
+
 def main():
+    nazwa_pliku = 'stan_magazynu.txt'
+    odczytaj_z_pliku(nazwa_pliku)
     while True:
         print(f'Dostepne komendy: {DOSTEPNE_KOMENDY}')
         wybor_uzytkownika = input('Podaj komende: ')
@@ -150,6 +172,7 @@ def main():
         elif wybor_uzytkownika == 'przeglad':
             pokaz_przeglad()
         elif wybor_uzytkownika == 'koniec':
+            zapisz_do_pliku(nazwa_pliku)
             break
         else:
             print('Nie ma takiej komendy.')
