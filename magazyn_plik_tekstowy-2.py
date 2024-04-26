@@ -1,7 +1,7 @@
-# odczyt z pliku bez towaru o wartosci zero
 # obiekt magazyn
 # import z pliku
 # angielskie nazwy
+# test
 
 DOSTEPNE_KOMENDY = ['saldo', 'sprzedaz', 'zakup', 'konto', 'lista',
                     'magazyn', 'przeglad', 'koniec']
@@ -126,18 +126,12 @@ def zapisz_do_pliku(nazwa_pliku):
         plik.write(f'Stan konta: {konto}\n')
         plik.write('Stan magazynu wynosi:\n')
         pusty_magazyn = True
-        # print('Stan magazynu wynosi:')
         for nazwa_produktu, ilosc in magazyn.items():
-            # liczba_sztuk_w_magazynie = ilosc['sztuk']
             if magazyn[nazwa_produktu]['sztuk'] > 0:
                 pusty_magazyn = False
-                # print(f'Produkt {nazwa_produktu}, sztuk {liczba_sztuk_w_magazynie}\n')
                 plik.write(f'Produkt: {nazwa_produktu}, sztuk: {ilosc["sztuk"]}\n')
         if pusty_magazyn:
             plik.write('Magazyn jest pusty.\n')
-            # print('Magazyn jest pusty.')
-        # for nazwa_produktu, ilosc in magazyn.items():
-        #     plik.write(f'Produkt: {nazwa_produktu}, sztuk: {ilosc["sztuk"]}\n')
         plik.write('Historia operacji:\n')
         for operacja in lista_operacji:
             plik.write(f'{operacja}\n')
@@ -147,15 +141,13 @@ def odczytaj_z_pliku(nazwa_pliku):
     global konto, magazyn, lista_operacji
 
     try:
-        with open(nazwa_pliku, 'r') as plik:
+        with (open(nazwa_pliku, 'r') as plik):
             linie = plik.readlines()
             konto = float(linie[0].split(': ')[1].strip())
             print(f'Stan konta wynosi: {konto}')
             if len(linie) > 1:
                 print('Stan magazynu wynosi:')
                 pusty_magazyn = True
-            # print('Stan magazynu wynosi:')
-            # pusty_magazyn = True
                 for linia in linie[2:]:
                     if linia.startswith('Produkt'):
                         czesci = linia.split(',')
@@ -171,56 +163,12 @@ def odczytaj_z_pliku(nazwa_pliku):
                 print('Magazyn jest pusty.')
             for linia in linie:
                 linia = linia.strip()
-                if linia.startswith('Sprzedano') or linia.startswith('Kupiono'):
+                if linia.startswith('Sprzedano') or linia.startswith('Kupiono') or linia.startswith('Zaktualizowano'):
                     lista_operacji.append(linia)
-            # elif linia.startswith('Sprzedano') or linia.startswith('Kupiono'):
-            #     lista_operacji.append(linia.strip())
     except FileNotFoundError:
         print("Plik nie istnieje. Nie wczytano stanu.")
 
     return konto, magazyn, lista_operacji
-
-# def odczytaj_z_pliku(nazwa_pliku):
-#     konto = 0.0
-#     magazyn = {}
-#     lista_operacji = []
-#
-#     try:
-#         with open(nazwa_pliku, 'r') as plik:
-#             linie = plik.readlines()
-#             konto = float(linie[0].split(': ')[1].strip())
-#             print(f'Stan konta wynosi: {konto}')
-#
-#             if len(linie) > 1:
-#                 print('Stan magazynu wynosi:')
-#                 pusty_magazyn = True
-#
-#                 for linia in linie[2:]:
-#                     if linia.startswith('Produkt'):
-#                         czesci = linia.split(',')
-#                         nazwa_produktu = czesci[0].split(': ')[1].strip()
-#                         ilosc_sztuk = int(czesci[1].split(': ')[1].strip())
-#                         magazyn[nazwa_produktu] = {'sztuk': ilosc_sztuk, 'cena': 0}
-#
-#                         if ilosc_sztuk > 0:
-#                             pusty_magazyn = False
-#                             print(f'Produkt: {nazwa_produktu}, sztuk: {ilosc_sztuk}')
-#
-#                 # Komunikat o stanie magazynu (w tym o pustym magazynie, jeśli odpowiednio pusty)
-#                 if pusty_magazyn:
-#                     print('Magazyn jest pusty.')
-#             else:
-#                 print('Magazyn jest pusty.')  # Dodatkowy komunikat, jeśli brak produktów w pliku
-#
-#             for linia in linie:
-#                 linia = linia.strip()
-#                 if linia.startswith('Sprzedano') or linia.startswith('Kupiono'):
-#                     lista_operacji.append(linia)
-#
-#     except FileNotFoundError:
-#         print("Plik nie istnieje. Nie wczytano stanu.")
-#
-#     return konto, magazyn, lista_operacji
 
 
 def main():
