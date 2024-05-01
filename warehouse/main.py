@@ -1,5 +1,5 @@
-from warehouse.constants import COMMANDS
-from warehouse.models import Warehouse
+from constants import COMMANDS
+from models import Warehouse
 
 
 def account_balance(warehouse):
