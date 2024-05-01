@@ -79,25 +79,26 @@ def wykonaj_saldo(magazyn):
 
 def sprzedaj(magazyn):
     nazwa_produktu = input('Podaj nazwe produktu: ')
-    if nazwa_produktu not in magazyn.magazyn:
+    if nazwa_produktu not in magazyn.magazyn or magazyn.magazyn[nazwa_produktu]['sztuk'] == 0:
         print('Produktu nie ma w magazynie.')
-    else:
-        liczba_sztuk = int(input('Podaj liczbe sztuk: '))
-        if liczba_sztuk <= 0:
-            print('Nieprawidlowa ilosc.')
-        elif liczba_sztuk > magazyn.magazyn[nazwa_produktu]['sztuk']:
-            print('Nie ma tylu sztuk w magazynie.')
-        else:
-            cena_produktu = float(input('Podaj cene produktu: '))
-            if cena_produktu <= 0:
-                print('Cena nie mozna byc ujemna ani zerowa.')
-            else:
-                magazyn.magazyn[nazwa_produktu]['sztuk'] -= liczba_sztuk
-                magazyn.konto += cena_produktu * liczba_sztuk
-                magazyn.lista_operacji.append(
-                    f'Sprzedano produkt {nazwa_produktu}, '
-                    f'sztuk {liczba_sztuk} po {cena_produktu}'
-                )
+        return
+    liczba_sztuk = int(input('Podaj liczbe sztuk: '))
+    if liczba_sztuk <= 0:
+        print('Nieprawidlowa ilosc.')
+        return
+    if liczba_sztuk > magazyn.magazyn[nazwa_produktu]['sztuk']:
+        print('Nie ma tylu sztuk w magazynie.')
+        return
+    cena_produktu = float(input('Podaj cene produktu: '))
+    if cena_produktu <= 0:
+        print('Cena nie mozna byc ujemna ani zerowa.')
+        return
+    magazyn.magazyn[nazwa_produktu]['sztuk'] -= liczba_sztuk
+    magazyn.konto += cena_produktu * liczba_sztuk
+    magazyn.lista_operacji.append(
+        f'Sprzedano produkt {nazwa_produktu}, '
+        f'sztuk {liczba_sztuk} po {cena_produktu}'
+    )
 
 
 def kup(magazyn):
@@ -105,26 +106,27 @@ def kup(magazyn):
     liczba_sztuk = int(input('Podaj liczbe sztuk: '))
     if liczba_sztuk <= 0:
         print('Nieprawidlowa ilosc.')
+        return
+    cena_produktu = float(input('Podaj cenę produktu: '))
+    if cena_produktu <= 0:
+        print('Cena nie mozna byc ujemna ani zerowa.')
+        return
+    if cena_produktu > magazyn.konto or cena_produktu * liczba_sztuk > magazyn.konto:
+        print('Nie masz wystarczajacych srodkow na koncie.')
+        return
+    kwota_zakupu = cena_produktu * liczba_sztuk
+    if nazwa_produktu not in magazyn.magazyn:
+        magazyn.magazyn[nazwa_produktu] = {'sztuk': 0, 'cena': cena_produktu}
     else:
-        cena_produktu = float(input('Podaj cenę produktu: '))
-        if cena_produktu > magazyn.konto or cena_produktu * liczba_sztuk > magazyn.konto:
-            print('Nie masz wystarczajacych srodkow na koncie.')
-        elif cena_produktu <= 0:
-            print('Cena nie mozna byc ujemna ani zerowa.')
-        else:
-            kwota_zakupu = cena_produktu * liczba_sztuk
-            if nazwa_produktu not in magazyn.magazyn:
-                magazyn.magazyn[nazwa_produktu] = {'sztuk': 0, 'cena': cena_produktu}
-            else:
-                magazyn.magazyn[nazwa_produktu]['cena'] = cena_produktu
-            magazyn.magazyn[nazwa_produktu]['sztuk'] += liczba_sztuk
-            magazyn.konto -= kwota_zakupu
-            cena_magazynowa = cena_produktu
-            magazyn.lista_operacji.append(
-                f'Kupiono produkt {nazwa_produktu}, '
-                f'sztuk {liczba_sztuk} '
-                f'po {cena_magazynowa}'
-            )
+        magazyn.magazyn[nazwa_produktu]['cena'] = cena_produktu
+    magazyn.magazyn[nazwa_produktu]['sztuk'] += liczba_sztuk
+    magazyn.konto -= kwota_zakupu
+    cena_magazynowa = cena_produktu
+    magazyn.lista_operacji.append(
+        f'Kupiono produkt {nazwa_produktu}, '
+        f'sztuk {liczba_sztuk} '
+        f'po {cena_magazynowa}'
+    )
 
 
 def sprawdz_konto(magazyn):

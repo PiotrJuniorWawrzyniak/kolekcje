@@ -79,25 +79,26 @@ def account_balance(warehouse):
 
 def sell_product(warehouse):
     product_name = input('Podaj nazwe produktu: ')
-    if product_name not in warehouse.warehouse:
+    if product_name not in warehouse.warehouse or warehouse.warehouse[product_name]['sztuk'] == 0:
         print('Produktu nie ma w magazynie.')
-    else:
-        pieces_number = int(input('Podaj liczbe sztuk: '))
-        if pieces_number <= 0:
-            print('Nieprawidlowa ilosc.')
-        elif pieces_number > warehouse.warehouse[product_name]['sztuk']:
-            print('Nie ma tylu sztuk w magazynie.')
-        else:
-            product_price = float(input('Podaj cene produktu: '))
-            if product_price <= 0:
-                print('Cena nie mozna byc ujemna ani zerowa.')
-            else:
-                warehouse.warehouse[product_name]['sztuk'] -= pieces_number
-                warehouse.account += product_price * pieces_number
-                warehouse.actions_list.append(
-                    f'Sprzedano produkt {product_name}, '
-                    f'sztuk {pieces_number} po {product_price}'
-                )
+        return
+    pieces_number = int(input('Podaj liczbe sztuk: '))
+    if pieces_number <= 0:
+        print('Nieprawidlowa ilosc.')
+        return
+    if pieces_number > warehouse.warehouse[product_name]['sztuk']:
+        print('Nie ma tylu sztuk w magazynie.')
+        return
+    product_price = float(input('Podaj cene produktu: '))
+    if product_price <= 0:
+        print('Cena nie mozna byc ujemna ani zerowa.')
+        return
+    warehouse.warehouse[product_name]['sztuk'] -= pieces_number
+    warehouse.account += product_price * pieces_number
+    warehouse.actions_list.append(
+        f'Sprzedano produkt {product_name}, '
+        f'sztuk {pieces_number} po {product_price}'
+    )
 
 
 def buy_product(warehouse):
@@ -105,26 +106,27 @@ def buy_product(warehouse):
     pieces_number = int(input('Podaj liczbe sztuk: '))
     if pieces_number <= 0:
         print('Nieprawidlowa ilosc.')
+        return
+    product_price = float(input('Podaj cenę produktu: '))
+    if product_price <= 0:
+        print('Cena nie mozna byc ujemna ani zerowa.')
+        return
+    if product_price > warehouse.account or product_price * pieces_number > warehouse.account:
+        print('Nie masz wystarczajacych srodkow na koncie.')
+        return
+    purchase_amount = product_price * pieces_number
+    if product_name not in warehouse.warehouse:
+        warehouse.warehouse[product_name] = {'sztuk': 0, 'cena': product_price}
     else:
-        product_price = float(input('Podaj cenę produktu: '))
-        if product_price > warehouse.account or product_price * pieces_number > warehouse.account:
-            print('Nie masz wystarczajacych srodkow na koncie.')
-        elif product_price <= 0:
-            print('Cena nie mozna byc ujemna ani zerowa.')
-        else:
-            purchase_amount = product_price * pieces_number
-            if product_name not in warehouse.warehouse:
-                warehouse.warehouse[product_name] = {'sztuk': 0, 'cena': product_price}
-            else:
-                warehouse.warehouse[product_name]['cena'] = product_price
-            warehouse.warehouse[product_name]['sztuk'] += pieces_number
-            warehouse.account -= purchase_amount
-            warehouse_price = product_price
-            warehouse.actions_list.append(
-                f'Kupiono produkt {product_name}, '
-                f'sztuk {pieces_number} '
-                f'po {warehouse_price}'
-            )
+        warehouse.warehouse[product_name]['cena'] = product_price
+    warehouse.warehouse[product_name]['sztuk'] += pieces_number
+    warehouse.account -= purchase_amount
+    warehouse_price = product_price
+    warehouse.actions_list.append(
+        f'Kupiono produkt {product_name}, '
+        f'sztuk {pieces_number} '
+        f'po {warehouse_price}'
+    )
 
 
 def check_account(warehouse):
