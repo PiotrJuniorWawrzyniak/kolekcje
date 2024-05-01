@@ -3,15 +3,17 @@ DOSTEPNE_KOMENDY = ['saldo', 'sprzedaz', 'zakup', 'konto', 'lista',
 
 
 class Magazyn:
-    def __init__(self, konto, magazyn, lista_operacji, nazwa_pliku):
+    def __init__(self, konto, magazyn, lista_operacji, nazwa_pliku_1, nazwa_pliku_2):
         self.konto = konto
         self.magazyn = magazyn
         self.lista_operacji = lista_operacji
-        self.nazwa_pliku = nazwa_pliku
+        self.nazwa_pliku_1 = nazwa_pliku_1
+        self.nazwa_pliku_2 = nazwa_pliku_2
 
-    def zapisz_do_pliku(self, nazwa_pliku):
-        self.nazwa_pliku = nazwa_pliku
-        with open(self.nazwa_pliku, 'w') as plik:
+    def zapisz_do_pliku(self, nazwa_pliku_1, nazwa_pliku_2):
+        self.nazwa_pliku_1 = nazwa_pliku_1
+        self.nazwa_pliku_2 = nazwa_pliku_2
+        with open(self.nazwa_pliku_1, 'w') as plik:
             plik.write(f'Stan konta: {self.konto}\n')
             plik.write('Stan magazynu wynosi:\n')
             pusty_magazyn = True
@@ -21,15 +23,17 @@ class Magazyn:
                     plik.write(f'Produkt: {nazwa_produktu}, sztuk: {ilosc["sztuk"]}\n')
             if pusty_magazyn:
                 plik.write('Magazyn jest pusty.\n')
+        with open(self.nazwa_pliku_2, 'w') as plik:
             plik.write('Historia operacji:\n')
             for operacja in self.lista_operacji:
                 plik.write(f'{operacja}\n')
 
-    def odczytaj_z_pliku(self, nazwa_pliku):
-        self.nazwa_pliku = nazwa_pliku
+    def odczytaj_z_pliku(self, nazwa_pliku_1, nazwa_pliku_2):
+        self.nazwa_pliku_1 = nazwa_pliku_1
+        self.nazwa_pliku_2 = nazwa_pliku_2
 
         try:
-            with open(self.nazwa_pliku, 'r') as plik:
+            with open(self.nazwa_pliku_1, 'r') as plik:
                 linie = plik.readlines()
                 self.konto = float(linie[0].split(': ')[1].strip())
                 print(f'Stan konta wynosi: {self.konto}')
@@ -49,6 +53,8 @@ class Magazyn:
                         print('Magazyn jest pusty.')
                 else:
                     print('Magazyn jest pusty.')
+            with open(self.nazwa_pliku_2, 'r') as plik:
+                linie = plik.readlines()
                 for linia in linie:
                     linia = linia.strip()
                     if (linia.startswith('Sprzedano') or
@@ -194,9 +200,14 @@ def pokaz_przeglad(magazyn):
 
 
 def main():
-    magazyn = Magazyn(konto=0, magazyn={}, lista_operacji=[], nazwa_pliku='stan_magazynu.txt')
-    magazyn.nazwa_pliku = 'stan_magazynu.txt'
-    magazyn.odczytaj_z_pliku(magazyn.nazwa_pliku)
+    magazyn = Magazyn(konto=0,
+                      magazyn={},
+                      lista_operacji=[],
+                      nazwa_pliku_1='stan_magazynu.txt',
+                      nazwa_pliku_2='historia_operacji.txt')
+    magazyn.nazwa_pliku_1 = 'stan_magazynu.txt'
+    magazyn.nazwa_pliku_2 = 'historia_operacji.txt'
+    magazyn.odczytaj_z_pliku(magazyn.nazwa_pliku_1, magazyn.nazwa_pliku_2)
 
     while True:
         print(f'Dostepne komendy: {DOSTEPNE_KOMENDY}')
@@ -216,7 +227,7 @@ def main():
         elif wybor_uzytkownika == 'przeglad':
             pokaz_przeglad(magazyn)
         elif wybor_uzytkownika == 'koniec':
-            magazyn.zapisz_do_pliku(magazyn.nazwa_pliku)
+            magazyn.zapisz_do_pliku(magazyn.nazwa_pliku_1, magazyn.nazwa_pliku_2)
             break
         else:
             print('Nie ma takiej komendy.')

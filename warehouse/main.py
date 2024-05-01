@@ -3,15 +3,17 @@ COMMANDS = ['saldo', 'sprzedaz', 'zakup', 'konto', 'lista',
 
 
 class Warehouse:
-    def __init__(self, account, warehouse, actions_list, file_name):
+    def __init__(self, account, warehouse, actions_list, file_name_1, file_name_2):
         self.account = account
         self.warehouse = warehouse
         self.actions_list = actions_list
-        self.file_name = file_name
+        self.file_name_1 = file_name_1
+        self.file_name_2 = file_name_2
 
-    def save_to_file(self, file_name):
-        self.file_name = file_name
-        with open(self.file_name, 'w') as file:
+    def save_to_file(self, file_name_1, file_name_2):
+        self.file_name_1 = file_name_1
+        self.file_name_2 = file_name_2
+        with open(self.file_name_1, 'w') as file:
             file.write(f'Stan konta: {self.account}\n')
             file.write('Stan magazynu wynosi:\n')
             empty_warehouse = True
@@ -21,15 +23,17 @@ class Warehouse:
                     file.write(f'Produkt: {product_name}, sztuk: {quantity["sztuk"]}\n')
             if empty_warehouse:
                 file.write('Magazyn jest pusty.\n')
+        with open(self.file_name_2, 'w') as file:
             file.write('Historia operacji:\n')
             for action in self.actions_list:
                 file.write(f'{action}\n')
 
-    def read_from_file(self, file_name):
-        self.file_name = file_name
+    def read_from_file(self, file_name_1, file_name_2):
+        self.file_name_1 = file_name_1
+        self.file_name_2 = file_name_2
 
         try:
-            with open(self.file_name, 'r') as file:
+            with open(self.file_name_1, 'r') as file:
                 lines = file.readlines()
                 self.account = float(lines[0].split(': ')[1].strip())
                 print(f'Stan konta wynosi: {self.account}')
@@ -49,6 +53,8 @@ class Warehouse:
                         print('Magazyn jest pusty.')
                 else:
                     print('Magazyn jest pusty.')
+            with open(self.file_name_2, 'r') as file:
+                lines = file.readlines()
                 for line in lines:
                     line = line.strip()
                     if (line.startswith('Sprzedano') or
@@ -194,9 +200,14 @@ def show_overview(warehouse):
 
 
 def main():
-    warehouse = Warehouse(account=0, warehouse={}, actions_list=[], file_name='stan_magazynu.txt')
-    warehouse.file_name = 'stan_magazynu.txt'
-    warehouse.read_from_file(warehouse.file_name)
+    warehouse = Warehouse(account=0,
+                          warehouse={},
+                          actions_list=[],
+                          file_name_1='stan_magazynu.txt',
+                          file_name_2='historia_operacji.txt')
+    warehouse.file_name_1 = 'stan_magazynu.txt'
+    warehouse.file_name_2 = 'historia_operacji.txt'
+    warehouse.read_from_file(warehouse.file_name_1, warehouse.file_name_2)
 
     while True:
         print(f'Dostepne komendy: {COMMANDS}')
@@ -216,7 +227,7 @@ def main():
         elif user_choice == 'przeglad':
             show_overview(warehouse)
         elif user_choice == 'koniec':
-            warehouse.save_to_file(warehouse.file_name)
+            warehouse.save_to_file(warehouse.file_name_1, warehouse.file_name_2)
             break
         else:
             print('Nie ma takiej komendy.')
