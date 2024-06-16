@@ -1,0 +1,3 @@
+Stan konta: 0.0
+Stan magazynu wynosi:
+Magazyn jest pusty.

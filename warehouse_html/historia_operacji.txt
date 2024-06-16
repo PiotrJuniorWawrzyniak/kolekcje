@@ -1,0 +1,20 @@
+Historia operacji:
+Zaktualizowano saldo. Do konta dodano 100.0.
+Kupiono produkt rower, sztuk 1 po 40.0
+Sprzedano produkt rower, sztuk 1 po 50.0
+Kupiono produkt motor, sztuk 1 po 60.0
+Kupiono produkt rower, sztuk 1 po 40.0
+Sprzedano 1 sztuk produktu rower po cenie 50.0 za sztukê.
+Kupiono 1 sztuk produktu rower po cenie 40.0 za sztukê.
+Zaktualizowano saldo o wartoœæ 100.0 z komentarzem: dodanie do konta
+Sprzedano 1 sztuk produktu rower po cenie 50.0 za sztukê.
+Sprzedano 1 sztuk produktu motor po cenie 80.0 za sztukê.
+Zaktualizowano saldo o wartoœæ 100.0 z komentarzem: odjêcie z konta
+Zaktualizowano saldo o wartoœæ -250.0 z komentarzem: odjêcie z konta
+Kupiono produkt rower, sztuk 1 po 40.0
+Kupiono produkt motor, sztuk 1 po 60.0
+Sprzedano produkt rower, sztuk 1 po 60.0
+Sprzedano 1 szt. motor za 80.0 z³
+Kupiono 1 szt. auto za 140.0 z³
+Sprzedano 1 szt. auto za 200.0 z³
+Zaktualizowano saldo: odjecie z konta (-200.0 z³)

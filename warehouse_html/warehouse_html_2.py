@@ -63,6 +63,32 @@ class Warehouse:
         except FileNotFoundError:
             print("Plik nie istnieje. Nie wczytano stanu.")
 
+    def buy_product(self, product_name, pieces_number, product_price):
+        if product_name in self.warehouse:
+            self.warehouse[product_name]['sztuk'] += pieces_number
+        else:
+            self.warehouse[product_name] = {'sztuk': pieces_number, 'cena': product_price}
+        self.account -= pieces_number * product_price
+        operation = f'Kupiono {pieces_number} szt. {product_name} za {product_price} zł'
+        self.actions_list.append(operation)
+        self.save_to_file(self.file_name_1, self.file_name_2)
+
+    def sell_product(self, product_name, pieces_number, product_price):
+        if product_name in self.warehouse and self.warehouse[product_name]['sztuk'] >= pieces_number:
+            self.warehouse[product_name]['sztuk'] -= pieces_number
+            self.account += pieces_number * product_price
+            operation = f'Sprzedano {pieces_number} szt. {product_name} za {product_price} zł'
+            self.actions_list.append(operation)
+            if self.warehouse[product_name]['sztuk'] == 0:
+                del self.warehouse[product_name]
+            self.save_to_file(self.file_name_1, self.file_name_2)
+
+    def update_balance(self, amount, comment):
+        self.account += amount
+        operation = f'Zaktualizowano saldo: {comment} ({amount} zł)'
+        self.actions_list.append(operation)
+        self.save_to_file(self.file_name_1, self.file_name_2)
+
 
 class Manager:
     def __init__(self, warehouse):
