@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Historia operacji</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Historia operacji</h1>
+    <form action="/historia/" method="get">
+        <label for="line_from">Od linii:</label>
+        <input type="number" id="line_from" name="line_from"><br>
+        <label for="line_to">Do linii:</label>
+        <input type="number" id="line_to" name="line_to"><br>
+        <input type="submit" value="Pokaż historię">
+    </form>
+    <ul>
+        {% for entry in historia %}
+            <li>{{ entry }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
