@@ -26,11 +26,11 @@
             <h2>Zakup</h2>
             <input type="hidden" name="action" value="zakup">
             <label for="purchase-product">Nazwa produktu:</label>
-            <input type="text" id="purchase-product" name="product_name">
+            <input type="text" id="purchase-product" name="product_name" required>
             <label for="purchase-price">Cena jednostkowa:</label>
-            <input type="text" id="purchase-price" name="product_price">
+            <input type="number" step="0.01" id="purchase-price" name="product_price" required>
             <label for="purchase-quantity">Liczba sztuk:</label>
-            <input type="text" id="purchase-quantity" name="pieces_number">
+            <input type="number" id="purchase-quantity" name="pieces_number" required>
             <button type="submit">Zakup</button>
         </form>
 
@@ -38,11 +38,11 @@
             <h2>Sprzedaż</h2>
             <input type="hidden" name="action" value="sprzedaz">
             <label for="sale-product">Nazwa produktu:</label>
-            <input type="text" id="sale-product" name="product_name">
+            <input type="text" id="sale-product" name="product_name" required>
             <label for="sale-price">Cena jednostkowa:</label>
-            <input type="text" id="sale-price" name="product_price">
+            <input type="number" step="0.01" id="sale-price" name="product_price" required>
             <label for="sale-quantity">Liczba sztuk:</label>
-            <input type="text" id="sale-quantity" name="pieces_number">
+            <input type="number" id="sale-quantity" name="pieces_number" required>
             <button type="submit">Sprzedaż</button>
         </form>
 
@@ -50,9 +50,9 @@
             <h2>Zmiana salda</h2>
             <input type="hidden" name="action" value="saldo">
             <label for="balance-comment">Komentarz:</label>
-            <input type="text" id="balance-comment" name="comment">
+            <input type="text" id="balance-comment" name="comment" required>
             <label for="balance-amount">Wartość:</label>
-            <input type="text" id="balance-amount" name="amount">
+            <input type="number" step="0.01" id="balance-amount" name="amount" required>
             <button type="submit">Zmień saldo</button>
         </form>
     </div>
@@ -60,5 +60,9 @@
     <div id="history-link">
         <a href="{{ url_for('historia') }}">Historia operacji</a>
     </div>
+
+    {% if error_message %}
+    <div style="color: red;">{{ error_message }}</div>
+    {% endif %}
 </body>
 </html>

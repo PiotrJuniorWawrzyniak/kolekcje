@@ -1,3 +1,3 @@
-Stan konta: 0.0
+Stan konta: 140.0
 Stan magazynu wynosi:
-Magazyn jest pusty.
+Produkt: rower, sztuk: 1

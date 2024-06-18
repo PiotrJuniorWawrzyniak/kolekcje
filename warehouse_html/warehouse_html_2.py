@@ -64,11 +64,15 @@ class Warehouse:
             print("Plik nie istnieje. Nie wczytano stanu.")
 
     def buy_product(self, product_name, pieces_number, product_price):
+        total_cost = pieces_number * product_price
+        if total_cost > self.account:
+            print("Nie masz wystarczających środków na koncie.")
+            return
         if product_name in self.warehouse:
             self.warehouse[product_name]['sztuk'] += pieces_number
         else:
             self.warehouse[product_name] = {'sztuk': pieces_number, 'cena': product_price}
-        self.account -= pieces_number * product_price
+        self.account -= total_cost
         operation = f'Kupiono {pieces_number} szt. {product_name} za {product_price} zł'
         self.actions_list.append(operation)
         self.save_to_file(self.file_name_1, self.file_name_2)
