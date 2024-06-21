@@ -1,0 +1,4 @@
+Stan konta: 0.0
+Stan magazynu wynosi:
+Produkt: rower, sztuk: 4
+Produkt: motor, sztuk: 3
