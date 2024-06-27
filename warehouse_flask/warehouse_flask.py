@@ -77,15 +77,16 @@ class Warehouse:
         self.actions_list.append(operation)
         self.save_to_file(self.file_name_1, self.file_name_2)
 
-    def sell_product(self, product_name, pieces_number, product_price):
+    def sell_product(self, product_name, pieces_number):
         if product_name in self.warehouse and self.warehouse[product_name]['sztuk'] >= pieces_number:
             self.warehouse[product_name]['sztuk'] -= pieces_number
-            self.account += pieces_number * product_price
-            operation = f'Sprzedano {pieces_number} szt. {product_name} za {product_price} zł'
-            self.actions_list.append(operation)
             if self.warehouse[product_name]['sztuk'] == 0:
                 del self.warehouse[product_name]
+            operation = f'Sprzedano {pieces_number} szt. {product_name}'
+            self.actions_list.append(operation)
             self.save_to_file(self.file_name_1, self.file_name_2)
+        else:
+            raise ValueError("Nie ma wystarczającej ilości produktu w magazynie.")
 
     def update_balance(self, amount, comment=None):
         self.account += amount

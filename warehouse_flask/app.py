@@ -26,11 +26,10 @@ def index():
                 warehouse.buy_product(product_name, pieces_number, product_price)
             elif action == 'sprzedaz':
                 product_name = request.form['product_name']
-                product_price = float(request.form['product_price'])
                 pieces_number = int(request.form['pieces_number'])
-                if product_price <= 0 or pieces_number <= 0:
+                if pieces_number <= 0:
                     raise ValueError("Podaj poprawne dane.")
-                warehouse.sell_product(product_name, pieces_number, product_price)
+                warehouse.sell_product(product_name, pieces_number)
             elif action == 'saldo':
                 amount = float(request.form['amount'])
                 comment = request.form.get('comment', '')

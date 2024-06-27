@@ -56,3 +56,19 @@ Kupiono 1 szt. motor za 80.0 z³
 Zaktualizowano saldo: -20.0 z³
 Zaktualizowano saldo: 140.0 z³
 Kupiono 2 szt. rower za 70.0 z³
+Zaktualizowano saldo: 100.0 z³
+Kupiono 1 szt. auto za 100.0 z³
+Sprzedano 2 szt. rower
+Zaktualizowano saldo: 140.0 z³
+Kupiono 2 szt. motor za 70.0 z³
+Sprzedano 2 szt. motor
+Sprzedano 2 szt. rower
+Sprzedano 1 szt. motor
+Sprzedano 1 szt. auto
+Sprzedano 2 szt. motor
+Zaktualizowano saldo: -40.0 z³
+Zaktualizowano saldo: 140.0 z³
+Kupiono 1 szt. motor za 60.0 z³
+Kupiono 1 szt. rower za 40.0 z³
+Sprzedano 1 szt. rower
+Sprzedano 1 szt. motor
